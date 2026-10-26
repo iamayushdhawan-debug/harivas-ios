@@ -1,0 +1,117 @@
+# frozen_string_literal: true
+
+# Fastfile – HARIVAS iOS
+# Lanes to build each of the 5 app targets
+
+default_platform(:ios)
+
+# ── Shared helper ─────────────────────────────────────────────────────────────
+def build_target(scheme:, bundle_id:, output_name:)
+  gym(
+    workspace:           "HARIVASApp.xcworkspace",
+    scheme:              scheme,
+    configuration:       "Release",
+    clean:               true,
+    export_method:       "app-store",
+    output_directory:    "build/#{scheme}",
+    output_name:         "#{output_name}.ipa",
+    include_bitcode:     false,
+    include_symbols:     true,
+    export_options: {
+      method:                      "app-store",
+      provisioningProfiles:        { bundle_id => ENV["PROVISIONING_PROFILE_#{scheme.upcase}"] },
+      signingCertificate:          "Apple Distribution",
+      teamID:                      ENV["APPLE_TEAM_ID"],
+      uploadBitcode:               false,
+      uploadSymbols:               true,
+      compileBitcode:              false
+    }
+  )
+end
+
+platform :ios do
+
+  # ── Before all: generate project & install pods ────────────────────────────
+  before_all do
+    sh("brew install xcodegen || true")
+    sh("xcodegen generate")
+    cocoapods(repo_update: true)
+  end
+
+  # ── Individual build lanes ─────────────────────────────────────────────────
+
+  desc "Build HARIVAS Store IPA"
+  lane :build_store do
+    build_target(
+      scheme:      "HARIVASStore",
+      bundle_id:   "com.harivas.store",
+      output_name: "HARIVASStore"
+    )
+  end
+
+  desc "Build HARIVAS Rider IPA"
+  lane :build_rider do
+    build_target(
+      scheme:      "HARIVASRider",
+      bundle_id:   "com.harivas.rider",
+      output_name: "HARIVASRider"
+    )
+  end
+
+  desc "Build HARIVAS Vendor IPA"
+  lane :build_vendor do
+    build_target(
+      scheme:      "HARIVASVendor",
+      bundle_id:   "com.harivas.vendor",
+      output_name: "HARIVASVendor"
+    )
+  end
+
+  desc "Build HARIVAS Staff IPA"
+  lane :build_staff do
+    build_target(
+      scheme:      "HARIVASStaff",
+      bundle_id:   "com.harivas.staff",
+      output_name: "HARIVASStaff"
+    )
+  end
+
+  desc "Build HARIVAS Admin IPA"
+  lane :build_admin do
+    build_target(
+      scheme:      "HARIVASAdmin",
+      bundle_id:   "com.harivas.admin",
+      output_name: "HARIVASAdmin"
+    )
+  end
+
+  # ── Build all 5 targets sequentially ──────────────────────────────────────
+  desc "Build all 5 HARIVAS IPAs"
+  lane :build_all do
+    build_store
+    build_rider
+    build_vendor
+    build_staff
+    build_admin
+  end
+
+  # ── Upload all built IPAs to TestFlight ────────────────────────────────────
+  desc "Upload all IPAs to TestFlight"
+  lane :upload_all do
+    ["HARIVASStore", "HARIVASRider", "HARIVASVendor", "HARIVASStaff", "HARIVASAdmin"].each do |scheme|
+      ipa_path = Dir["build/#{scheme}/*.ipa"].first
+      next unless ipa_path
+
+      upload_to_testflight(
+        ipa:               ipa_path,
+        skip_waiting_for_build_processing: true,
+        apple_id:          ENV["APPLE_ID_#{scheme.upcase}"]
+      )
+    end
+  end
+
+  # ── Error handler ─────────────────────────────────────────────────────────
+  error do |lane, exception|
+    UI.error("Lane #{lane} failed with: #{exception.message}")
+  end
+end

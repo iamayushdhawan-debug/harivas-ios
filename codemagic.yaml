@@ -1,0 +1,266 @@
+workflows:
+
+  # ─────────────────────────────────────────────────────
+  # 1. HARIVAS Store
+  # ─────────────────────────────────────────────────────
+  harivas-store:
+    name: HARIVAS Store
+    max_build_duration: 60
+    environment:
+      xcode: 15.4
+      cocoapods: default
+      vars:
+        SCHEME: HARIVASStore
+        BUNDLE_ID: com.harivas.store
+      groups:
+        - harivas_store_signing
+    scripts:
+      - name: Install XcodeGen
+        script: brew install xcodegen || true
+      - name: Generate Xcode project
+        script: xcodegen generate
+      - name: Install CocoaPods
+        script: pod install --repo-update
+      - name: Set up code signing
+        script: |
+          keychain initialize
+          @certificate
+          @profile
+      - name: Archive
+        script: |
+          xcodebuild archive \
+            -workspace HARIVASApp.xcworkspace \
+            -scheme $SCHEME \
+            -configuration Release \
+            -archivePath "$CM_BUILD_DIR/$SCHEME.xcarchive" \
+            CODE_SIGN_STYLE=Manual \
+            DEVELOPMENT_TEAM="$APPLE_TEAM_ID" \
+            CODE_SIGN_IDENTITY="$CM_CERTIFICATE_TYPE" \
+            PROVISIONING_PROFILE_SPECIFIER="$CM_PROVISIONING_PROFILE" \
+            OTHER_CODE_SIGN_FLAGS="--keychain $CM_KEYCHAIN_PATH"
+      - name: Export IPA
+        script: |
+          xcodebuild -exportArchive \
+            -archivePath "$CM_BUILD_DIR/$SCHEME.xcarchive" \
+            -exportOptionsPlist ExportOptions/$SCHEME.plist \
+            -exportPath "$CM_EXPORT_DIR"
+    artifacts:
+      - "**/*.ipa"
+      - "**/*.dSYM.zip"
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true
+        submit_to_app_store: false
+
+  # ─────────────────────────────────────────────────────
+  # 2. HARIVAS Rider
+  # ─────────────────────────────────────────────────────
+  harivas-rider:
+    name: HARIVAS Rider
+    max_build_duration: 60
+    environment:
+      xcode: 15.4
+      cocoapods: default
+      vars:
+        SCHEME: HARIVASRider
+        BUNDLE_ID: com.harivas.rider
+      groups:
+        - harivas_rider_signing
+    scripts:
+      - name: Install XcodeGen
+        script: brew install xcodegen || true
+      - name: Generate Xcode project
+        script: xcodegen generate
+      - name: Install CocoaPods
+        script: pod install --repo-update
+      - name: Set up code signing
+        script: |
+          keychain initialize
+          @certificate
+          @profile
+      - name: Archive
+        script: |
+          xcodebuild archive \
+            -workspace HARIVASApp.xcworkspace \
+            -scheme $SCHEME \
+            -configuration Release \
+            -archivePath "$CM_BUILD_DIR/$SCHEME.xcarchive" \
+            CODE_SIGN_STYLE=Manual \
+            DEVELOPMENT_TEAM="$APPLE_TEAM_ID" \
+            CODE_SIGN_IDENTITY="$CM_CERTIFICATE_TYPE" \
+            PROVISIONING_PROFILE_SPECIFIER="$CM_PROVISIONING_PROFILE" \
+            OTHER_CODE_SIGN_FLAGS="--keychain $CM_KEYCHAIN_PATH"
+      - name: Export IPA
+        script: |
+          xcodebuild -exportArchive \
+            -archivePath "$CM_BUILD_DIR/$SCHEME.xcarchive" \
+            -exportOptionsPlist ExportOptions/$SCHEME.plist \
+            -exportPath "$CM_EXPORT_DIR"
+    artifacts:
+      - "**/*.ipa"
+      - "**/*.dSYM.zip"
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true
+        submit_to_app_store: false
+
+  # ─────────────────────────────────────────────────────
+  # 3. HARIVAS Vendor
+  # ─────────────────────────────────────────────────────
+  harivas-vendor:
+    name: HARIVAS Vendor
+    max_build_duration: 60
+    environment:
+      xcode: 15.4
+      cocoapods: default
+      vars:
+        SCHEME: HARIVASVendor
+        BUNDLE_ID: com.harivas.vendor
+      groups:
+        - harivas_vendor_signing
+    scripts:
+      - name: Install XcodeGen
+        script: brew install xcodegen || true
+      - name: Generate Xcode project
+        script: xcodegen generate
+      - name: Install CocoaPods
+        script: pod install --repo-update
+      - name: Set up code signing
+        script: |
+          keychain initialize
+          @certificate
+          @profile
+      - name: Archive
+        script: |
+          xcodebuild archive \
+            -workspace HARIVASApp.xcworkspace \
+            -scheme $SCHEME \
+            -configuration Release \
+            -archivePath "$CM_BUILD_DIR/$SCHEME.xcarchive" \
+            CODE_SIGN_STYLE=Manual \
+            DEVELOPMENT_TEAM="$APPLE_TEAM_ID" \
+            CODE_SIGN_IDENTITY="$CM_CERTIFICATE_TYPE" \
+            PROVISIONING_PROFILE_SPECIFIER="$CM_PROVISIONING_PROFILE" \
+            OTHER_CODE_SIGN_FLAGS="--keychain $CM_KEYCHAIN_PATH"
+      - name: Export IPA
+        script: |
+          xcodebuild -exportArchive \
+            -archivePath "$CM_BUILD_DIR/$SCHEME.xcarchive" \
+            -exportOptionsPlist ExportOptions/$SCHEME.plist \
+            -exportPath "$CM_EXPORT_DIR"
+    artifacts:
+      - "**/*.ipa"
+      - "**/*.dSYM.zip"
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true
+        submit_to_app_store: false
+
+  # ─────────────────────────────────────────────────────
+  # 4. HARIVAS Staff
+  # ─────────────────────────────────────────────────────
+  harivas-staff:
+    name: HARIVAS Staff
+    max_build_duration: 60
+    environment:
+      xcode: 15.4
+      cocoapods: default
+      vars:
+        SCHEME: HARIVASStaff
+        BUNDLE_ID: com.harivas.staff
+      groups:
+        - harivas_staff_signing
+    scripts:
+      - name: Install XcodeGen
+        script: brew install xcodegen || true
+      - name: Generate Xcode project
+        script: xcodegen generate
+      - name: Install CocoaPods
+        script: pod install --repo-update
+      - name: Set up code signing
+        script: |
+          keychain initialize
+          @certificate
+          @profile
+      - name: Archive
+        script: |
+          xcodebuild archive \
+            -workspace HARIVASApp.xcworkspace \
+            -scheme $SCHEME \
+            -configuration Release \
+            -archivePath "$CM_BUILD_DIR/$SCHEME.xcarchive" \
+            CODE_SIGN_STYLE=Manual \
+            DEVELOPMENT_TEAM="$APPLE_TEAM_ID" \
+            CODE_SIGN_IDENTITY="$CM_CERTIFICATE_TYPE" \
+            PROVISIONING_PROFILE_SPECIFIER="$CM_PROVISIONING_PROFILE" \
+            OTHER_CODE_SIGN_FLAGS="--keychain $CM_KEYCHAIN_PATH"
+      - name: Export IPA
+        script: |
+          xcodebuild -exportArchive \
+            -archivePath "$CM_BUILD_DIR/$SCHEME.xcarchive" \
+            -exportOptionsPlist ExportOptions/$SCHEME.plist \
+            -exportPath "$CM_EXPORT_DIR"
+    artifacts:
+      - "**/*.ipa"
+      - "**/*.dSYM.zip"
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true
+        submit_to_app_store: false
+
+  # ─────────────────────────────────────────────────────
+  # 5. HARIVAS Admin
+  # ─────────────────────────────────────────────────────
+  harivas-admin:
+    name: HARIVAS Admin
+    max_build_duration: 60
+    environment:
+      xcode: 15.4
+      cocoapods: default
+      vars:
+        SCHEME: HARIVASAdmin
+        BUNDLE_ID: com.harivas.admin
+      groups:
+        - harivas_admin_signing
+    scripts:
+      - name: Install XcodeGen
+        script: brew install xcodegen || true
+      - name: Generate Xcode project
+        script: xcodegen generate
+      - name: Install CocoaPods
+        script: pod install --repo-update
+      - name: Set up code signing
+        script: |
+          keychain initialize
+          @certificate
+          @profile
+      - name: Archive
+        script: |
+          xcodebuild archive \
+            -workspace HARIVASApp.xcworkspace \
+            -scheme $SCHEME \
+            -configuration Release \
+            -archivePath "$CM_BUILD_DIR/$SCHEME.xcarchive" \
+            CODE_SIGN_STYLE=Manual \
+            DEVELOPMENT_TEAM="$APPLE_TEAM_ID" \
+            CODE_SIGN_IDENTITY="$CM_CERTIFICATE_TYPE" \
+            PROVISIONING_PROFILE_SPECIFIER="$CM_PROVISIONING_PROFILE" \
+            OTHER_CODE_SIGN_FLAGS="--keychain $CM_KEYCHAIN_PATH"
+      - name: Export IPA
+        script: |
+          xcodebuild -exportArchive \
+            -archivePath "$CM_BUILD_DIR/$SCHEME.xcarchive" \
+            -exportOptionsPlist ExportOptions/$SCHEME.plist \
+            -exportPath "$CM_EXPORT_DIR"
+    artifacts:
+      - "**/*.ipa"
+      - "**/*.dSYM.zip"
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true
+        submit_to_app_store: false

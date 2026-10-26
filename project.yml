@@ -1,0 +1,236 @@
+name: HARIVASApp
+options:
+  bundleIdPrefix: com.harivas
+  deploymentTarget:
+    iOS: "15.0"
+  xcodeVersion: "15.4"
+  groupSortPosition: top
+  createIntermediateGroups: true
+  transitivelyLinkDependencies: true
+
+settings:
+  base:
+    SWIFT_VERSION: "5.9"
+    IPHONEOS_DEPLOYMENT_TARGET: "15.0"
+    CODE_SIGN_STYLE: Automatic
+    ENABLE_BITCODE: NO
+    DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
+    TARGETED_DEVICE_FAMILY: "1,2"
+
+packages:
+  FirebaseMessaging:
+    url: https://github.com/firebase/firebase-ios-sdk
+    from: 10.0.0
+
+targets:
+
+  HARIVASStore:
+    type: application
+    platform: iOS
+    deploymentTarget: "15.0"
+    sources:
+      - path: Sources
+    resources:
+      - path: Assets/Store
+    info:
+      path: Targets/Store/Info.plist
+    settings:
+      base:
+        PRODUCT_NAME: HARIVASStore
+        PRODUCT_BUNDLE_IDENTIFIER: com.harivas.store
+        INFOPLIST_FILE: Targets/Store/Info.plist
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        CODE_SIGN_STYLE: Automatic
+      configs:
+        Debug:
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: DEBUG
+        Release:
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: RELEASE
+    dependencies:
+      - package: FirebaseMessaging
+        product: FirebaseMessaging
+
+  HARIVASRider:
+    type: application
+    platform: iOS
+    deploymentTarget: "15.0"
+    sources:
+      - path: Sources
+    resources:
+      - path: Assets/Rider
+    info:
+      path: Targets/Rider/Info.plist
+    settings:
+      base:
+        PRODUCT_NAME: HARIVASRider
+        PRODUCT_BUNDLE_IDENTIFIER: com.harivas.rider
+        INFOPLIST_FILE: Targets/Rider/Info.plist
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        CODE_SIGN_STYLE: Automatic
+      configs:
+        Debug:
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: DEBUG
+        Release:
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: RELEASE
+    dependencies:
+      - package: FirebaseMessaging
+        product: FirebaseMessaging
+
+  HARIVASVendor:
+    type: application
+    platform: iOS
+    deploymentTarget: "15.0"
+    sources:
+      - path: Sources
+    resources:
+      - path: Assets/Vendor
+    info:
+      path: Targets/Vendor/Info.plist
+    settings:
+      base:
+        PRODUCT_NAME: HARIVASVendor
+        PRODUCT_BUNDLE_IDENTIFIER: com.harivas.vendor
+        INFOPLIST_FILE: Targets/Vendor/Info.plist
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        CODE_SIGN_STYLE: Automatic
+      configs:
+        Debug:
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: DEBUG
+        Release:
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: RELEASE
+    dependencies:
+      - package: FirebaseMessaging
+        product: FirebaseMessaging
+
+  HARIVASStaff:
+    type: application
+    platform: iOS
+    deploymentTarget: "15.0"
+    sources:
+      - path: Sources
+    resources:
+      - path: Assets/Staff
+    info:
+      path: Targets/Staff/Info.plist
+    settings:
+      base:
+        PRODUCT_NAME: HARIVASStaff
+        PRODUCT_BUNDLE_IDENTIFIER: com.harivas.staff
+        INFOPLIST_FILE: Targets/Staff/Info.plist
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        CODE_SIGN_STYLE: Automatic
+      configs:
+        Debug:
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: DEBUG
+        Release:
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: RELEASE
+    dependencies:
+      - package: FirebaseMessaging
+        product: FirebaseMessaging
+
+  HARIVASAdmin:
+    type: application
+    platform: iOS
+    deploymentTarget: "15.0"
+    sources:
+      - path: Sources
+    resources:
+      - path: Assets/Admin
+    info:
+      path: Targets/Admin/Info.plist
+    settings:
+      base:
+        PRODUCT_NAME: HARIVASAdmin
+        PRODUCT_BUNDLE_IDENTIFIER: com.harivas.admin
+        INFOPLIST_FILE: Targets/Admin/Info.plist
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        CODE_SIGN_STYLE: Automatic
+      configs:
+        Debug:
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: DEBUG
+        Release:
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: RELEASE
+    dependencies:
+      - package: FirebaseMessaging
+        product: FirebaseMessaging
+
+schemes:
+  HARIVASStore:
+    build:
+      targets:
+        HARIVASStore: all
+    run:
+      config: Debug
+    test:
+      config: Debug
+    profile:
+      config: Release
+    analyze:
+      config: Debug
+    archive:
+      config: Release
+
+  HARIVASRider:
+    build:
+      targets:
+        HARIVASRider: all
+    run:
+      config: Debug
+    test:
+      config: Debug
+    profile:
+      config: Release
+    analyze:
+      config: Debug
+    archive:
+      config: Release
+
+  HARIVASVendor:
+    build:
+      targets:
+        HARIVASVendor: all
+    run:
+      config: Debug
+    test:
+      config: Debug
+    profile:
+      config: Release
+    analyze:
+      config: Debug
+    archive:
+      config: Release
+
+  HARIVASStaff:
+    build:
+      targets:
+        HARIVASStaff: all
+    run:
+      config: Debug
+    test:
+      config: Debug
+    profile:
+      config: Release
+    analyze:
+      config: Debug
+    archive:
+      config: Release
+
+  HARIVASAdmin:
+    build:
+      targets:
+        HARIVASAdmin: all
+    run:
+      config: Debug
+    test:
+      config: Debug
+    profile:
+      config: Release
+    analyze:
+      config: Debug
+    archive:
+      config: Release
